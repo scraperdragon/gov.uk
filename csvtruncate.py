@@ -1,5 +1,9 @@
 import csv, codecs, cStringIO, os
 
+"""
+Ensure that no cell in a CSV file contains >32K characters.
+"""
+
 class UTF8Recoder:
     """
     Iterator that reads an encoded stream and reencodes the input to UTF-8
