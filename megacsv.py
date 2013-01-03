@@ -4,6 +4,7 @@ import codecs
 import cgi, os, csv, sys, json
 import collections
 import copy
+import requests
 
 # currently this is implemented as a view for quick response to changes
 # but it could be done as a scraper or an api download
@@ -149,22 +150,23 @@ def genericcsv(filename,nicenames,colnames):
             data["__link"]=link
             writer.writerow([data[i] for i in colnames])
 
-try:
-    qdict = dict(cgi.parse_qsl(os.getenv("QUERY_STRING")))
-except:
-    #print os.getenv("QUERY_STRING")
-    qdict={'type':'dclg_pubs'}
+#try:
+#    qdict = dict(cgi.parse_qsl(os.getenv("QUERY_STRING")))
+#except:
+#    #print os.getenv("QUERY_STRING")
+#    qdict={'type':'dclg_pubs'}
+
+qdict = {'type':'dclg_newsscrape',
+         'limit':'123456'}
     
-scraperwiki.sqlite.attach("betal-populate")
-#scraperwiki.sqlite.attach("betal-override")
-scraperwiki.sqlite.attach("betal-parser")
-#qselect = "SELECT raw.link, coalesce(override.type, raw.type) as ctype, output.data, output.err"
-#qfrom = " FROM raw LEFT JOIN output on output.link=raw.link LEFT JOIN override on override.link=raw.link"
+# Old Style:
+# scraperwiki.sqlite.attach("betal-populate")
+# scraperwiki.sqlite.attach("betal-parser")
 qselect = "SELECT raw.link, raw.type as ctype, output.data, output.err"
 qfrom = " FROM raw LEFT JOIN output on output.link=raw.link"
 qwhere = " WHERE output.data is not null"
+
 stype = qdict.get("type")
-#pager = qdict.get("page")
 if stype:
     qwhere += " AND ctype='"+stype+"'"
 if qdict.get("limit"):
@@ -173,10 +175,18 @@ else:
     qlimit = ""
 if qdict.get("offset"):
     qlimit += " OFFSET %s" % qdict.get("offset")
-res = scraperwiki.sqlite.execute(qselect+qfrom+qwhere+qlimit)
 
-if stype == "dclg_news":
-    jsoncsv("dclg_news",
+res = scraperwiki.sqlite.execute(qselect+qfrom+qwhere+qlimit)
+#apiurl = 'https://api.scraperwiki.com/api/1.0/datastore/sqlite'
+#apiparams = {'name':'betal-populate',
+#             'attach':'betal-parser',
+#             'format':'jsonlist',
+#             'query':qselect + qfrom + qwhere + qlimit}
+#rawapi=requests.get(apiurl, params=apiparams, verify=False).text
+#res = json.loads(rawapi)
+
+if stype == "dclg_newsscrape":
+    jsoncsv("dclg_newsscrape",
                 ['link', 'title', 'body', 'meta', 'attachment', 'images', 'published'],
                 ['link', 'title', 'markdown', 'metadata', 'attachments', 'images', 't_Published'])
     exit()
