@@ -1,3 +1,4 @@
+import datetool
 import requests
 import urlparse
 import lxml.html
@@ -31,7 +32,7 @@ def scrape_list_page(url):
             summary = ""
    
         items.append({"Title": title,
-                      "Publication date": date,
+                      "Publication date": datetool.parsedate(date),
                       "Old URL": url,
                       "Summary": summary,
                       "Attachments": json.dumps(attachments),

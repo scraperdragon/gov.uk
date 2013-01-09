@@ -2,8 +2,7 @@ def parsedate(datestring, outformat = "%d-%b-%Y", silent=False):
   """returns formatted date or None."""
   """fails if only partial date."""
   """Note: ISO = %Y-%m-%d"""
-  """Cabinet office like %d %b %Y"""
-  # TODO make dateformat optional.
+  """Cabinet office like %d-%b-%Y"""
 
   import dateutil.parser
   import datetime
