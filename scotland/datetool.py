@@ -1,4 +1,4 @@
-def parsedate(datestring, outformat = "%d %b %Y", silent=False):
+def parsedate(datestring, outformat = "%d-%b-%Y", silent=False):
   """returns formatted date or None."""
   """fails if only partial date."""
   """Note: ISO = %Y-%m-%d"""
