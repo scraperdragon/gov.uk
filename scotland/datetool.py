@@ -24,5 +24,3 @@ def parsedate(datestring, outformat = "%d %b %Y", silent=False):
   if not silent: # and there's some but not all date fragments
     raise AttributeError, "Partial date: %s"%datestring
   return None
-
-print parsedate("7 January 1929")

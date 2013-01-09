@@ -3,7 +3,7 @@ from lxml import etree
 import requests
 import urlparse
 import json
-
+import datetool
 from dumptruck import DumpTruck
 from common import dumptruck_to_csv
 
@@ -41,7 +41,7 @@ for link in doc.xpath("//div[@class='wrapper']/ul/li/a"):
             file_data = {"Old URL": series_url,
                          "Title": file_title,
                          "Body": file_title,
-                         "Publication date": file_pub_date,
+                         "Publication date": datetool.parsedate(file_pub_date),
                          "Attachment": file_link,
                          "Attachment title": file_title,
                          "Associated organisations": "Scotland Office",
